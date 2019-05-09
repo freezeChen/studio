@@ -5,3 +5,26 @@
    @Software: studio
 */
 package template
+
+var Dao_template =
+`/*
+   @Time : {{.Time}}
+   @Author : {{.Author}}
+   @File : dao
+   @Software: {{.Appname}}
+*/
+package dao
+
+type Dao struct {
+}
+
+func New() (dao *Dao) {
+
+	dao = &Dao{
+
+	}
+
+	return
+}
+
+`
