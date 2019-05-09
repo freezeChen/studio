@@ -8,13 +8,13 @@ package new
 
 import (
 	"fmt"
+	tmpl "github.com/freezeChen/studio/template"
+	"github.com/freezeChen/studio/util"
 	"github.com/micro/cli"
 	"github.com/xlab/treeprint"
 	"os"
 	"path/filepath"
 	"strings"
-	tmpl "studio/template"
-	"studio/util"
 	"text/template"
 	"time"
 )
