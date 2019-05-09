@@ -1,4 +1,4 @@
-module studio
+module github.com/freezeChen/studio
 
 go 1.12
 

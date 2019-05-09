@@ -7,9 +7,9 @@
 package main
 
 import (
+	New "github.com/freezeChen/studio/new"
 	"github.com/micro/cli"
 	"github.com/micro/go-micro/cmd"
-	New "studio/new"
 )
 
 const version string = "v0.0.1"
