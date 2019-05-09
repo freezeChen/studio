@@ -9,7 +9,10 @@
 .idea
 # Test binary, build with `go test -c`
 *.test
-
+go.sum
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+studiodemo
+
 

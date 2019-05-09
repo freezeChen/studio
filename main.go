@@ -7,9 +7,9 @@
 package main
 
 import (
-	"fmt"
 	"github.com/micro/cli"
 	"github.com/micro/go-micro/cmd"
+	New "studio/new"
 )
 
 const version string = "v0.0.1"
@@ -26,20 +26,11 @@ func main() {
 
 	//cli.hel
 
-	app.Action = func(context *cli.Context) {
-		//cli.ShowAppHelp(context)
-
+	app.Action = func(c *cli.Context) {
+		cli.ShowAppHelp(c)
 	}
 
-	app.Commands = append(app.Commands, cli.Command{
-
-		Name: "test",
-		Action: func(context *cli.Context) {
-
-			//context.
-			fmt.Println("do test")
-		},
-	})
+	app.Commands = append(app.Commands, New.Command()...)
 
 	cmd.Init(
 		cmd.Name("studio"),

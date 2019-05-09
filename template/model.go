@@ -5,3 +5,12 @@
    @Software: studio
 */
 package template
+
+var Model_template = `/*
+   @Time : {{.Time}}
+   @Author : {{.Author}}
+   @File : model
+   @Software: {{.Appname}}
+*/
+package model
+`

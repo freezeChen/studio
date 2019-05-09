@@ -10,5 +10,6 @@ require (
 	github.com/micro/go-micro v1.1.0
 	github.com/micro/micro v1.1.1
 	github.com/shurcooL/home v0.0.0-20190204141146-5c8ae21d4240 // indirect
+	github.com/xlab/treeprint v0.0.0-20181112141820-a009c3971eca
 	k8s.io/utils v0.0.0-20190204185745-a326ccf4f02b // indirect
 )
