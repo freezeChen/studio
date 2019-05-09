@@ -103,6 +103,7 @@ func run(ctx *cli.Context) {
 				{"server/http/http.go", tmpl.HttpServer_template},
 				{"service/service.go", tmpl.Service_template},
 				{"Makefile", tmpl.Makefile_template},
+				{"conf/conf.go", tmpl.ConfDemo_template},
 			},
 			Comments: []string{
 				"\ndownload protobuf for micro:\n",
