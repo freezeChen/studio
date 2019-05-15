@@ -8,6 +8,7 @@ package template
 
 import (
 	"fmt"
+	"github.com/freezeChen/studio-library/redis"
 	"github.com/micro/go-config"
 	"github.com/micro/go-config/source/file"
 	"os"
@@ -17,11 +18,15 @@ import (
 var ConfDemo_template = `
 package conf
 
+import (
+	"github.com/freezeChen/studio-library/redis"
+)
+
 type Config struct {
 	Name string
 	Version string
 	Env string
-	Mysql 
+	Redis *redis.Redis 
 }
 
 func Init() {
@@ -38,7 +43,7 @@ type Config struct {
 	Version string
 	Env     string
 	Mysql   *mysqlConfig
-	Redis   *redisConfig
+	Redis   *redis.Config
 }
 
 type mysqlConfig struct {
@@ -47,20 +52,12 @@ type mysqlConfig struct {
 	Idle   int
 }
 
-type redisConfig struct {
-	Addr   string
-	Auth   string
-	Active int
-	Idle   int
-}
 
 func Init() {
 	cfg := config.NewConfig()
 	dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
 	source := file.NewSource(file.WithPath(dir + "/conf.yaml"))
-
 	err := cfg.Load(source)
-
 	cfg.Scan(Conf)
 	if err != nil {
 		fmt.Println(err)
