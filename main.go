@@ -16,7 +16,6 @@ const version string = "v0.0.1"
 const description = "a scaffolding for go-micro"
 
 func main() {
-
 	app := cmd.App()
 	app.Flags = append(app.Flags,
 		cli.StringFlag{
@@ -36,9 +35,6 @@ func main() {
 		cmd.Name("studio"),
 		cmd.Description(description),
 		cmd.Version(version))
-
 }
 
-func setup() {
 
-}
