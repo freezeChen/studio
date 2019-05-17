@@ -6,7 +6,7 @@
 */
 package template
 
-var HttpServer_template=`/*
+var HttpServer_template = `/*
    @Time : {{.Time}}
    @Author : {{.Author}}
    @File : server
@@ -18,6 +18,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"{{.Appname}}/service"
+	"{{.Appname}}/proto"
 )
 
 var (
@@ -39,6 +40,7 @@ func initRouter(e *gin.Engine) {
 }
 
 func hello(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, "hello")
+	reply,_ :=svc.HelloService.Hello(ctx,&proto.Req{S:"studio"})
+	ctx.JSON(http.StatusOK, reply.Message)
 }
 `

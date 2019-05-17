@@ -6,61 +6,60 @@
 */
 package template
 
-import (
-	"fmt"
-	"github.com/freezeChen/studio-library/redis"
-	"github.com/micro/go-config"
-	"github.com/micro/go-config/source/file"
-	"os"
-	"path/filepath"
-)
-
 var ConfDemo_template = `
 package conf
 
 import (
+	"github.com/freezeChen/studio-library/conf"
+	"github.com/freezeChen/studio-library/database/mysql"
 	"github.com/freezeChen/studio-library/redis"
-)
-
-type Config struct {
-	Name string
-	Version string
-	Env string
-	Redis *redis.Redis 
-}
-
-func Init() {
-
-}
-
-`
-var (
-	Conf = &Config{}
+	"github.com/freezeChen/studio-library/util"
+	"github.com/micro/go-config"
 )
 
 type Config struct {
 	Name    string
 	Version string
 	Env     string
-	Mysql   *mysqlConfig
+	Mysql   *mysql.Config
 	Redis   *redis.Config
 }
 
-type mysqlConfig struct {
-	Source string
-	Active int
-	Idle   int
-}
-
-
-func Init() {
+func Init() (*Config, error) {
+	var (
+		Conf = &Config{}
+	)
 	cfg := config.NewConfig()
-	dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
-	source := file.NewSource(file.WithPath(dir + "/conf.yaml"))
-	err := cfg.Load(source)
-	cfg.Scan(Conf)
-	if err != nil {
-		fmt.Println(err)
+
+	source := conf.LoadFileSource(util.GetCurrentDirectory() + "/conf.yaml")
+	cfg.Load(source)
+	if err := cfg.Scan(Conf); err != nil {
+		return nil, err
 	}
 
+	return Conf, nil
 }
+
+`
+
+var ConfFile_template = `
+name: "{{.Appname}}"
+env: "dev"
+version: "v0.0.1"
+mysql:
+  source: "test:test@tcp(127.0.0.1:3306)/test?timeout=5s&readTimeout=5s&writeTimeout=5s&parseTime=true&loc=Local&charset=utf8,utf8mb4"
+  active: 100
+  idle: 20
+
+
+redis:
+  addr: "127.0.0.1:6379"
+  auth: ""
+  active: 100
+  idle: 20
+  dialTimeout: "1ms"
+  readTimeout: "1ms"
+  writeTimeout: "1ms"
+  idleTimeout: "1ms"
+kafka: "127.0.0.1:9092"
+`

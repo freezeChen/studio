@@ -8,8 +8,8 @@ package new
 
 import (
 	"fmt"
+	"github.com/freezeChen/studio-library/util"
 	tmpl "github.com/freezeChen/studio/template"
-	"github.com/freezeChen/studio/util"
 	"github.com/micro/cli"
 	"github.com/xlab/treeprint"
 	"os"
@@ -56,7 +56,7 @@ func Command() []cli.Command {
 	return []cli.Command{
 		{
 			Name:  "new",
-			Usage: "create template",
+			Usage: ":create template",
 			Flags: []cli.Flag{
 				cli.StringFlag{
 					Name:  "type",
@@ -70,12 +70,21 @@ func Command() []cli.Command {
 				cli.StringFlag{
 					Name:  "author",
 					Usage: "author name",
-					Value: "frozenChen",
+					Value: "freezeChen",
+				},
+				cli.StringFlag{
+					Name:  "project",
+					Usage: "single is false,use project as name",
+				},
+				cli.BoolTFlag{
+					Name:  "single",
+					Usage: "gen single project",
 				},
 			},
 			Action: func(context *cli.Context) {
 				run(context)
 			},
+			HelpName: "use -h",
 		},
 	}
 }
@@ -84,35 +93,71 @@ func run(ctx *cli.Context) {
 	tye := ctx.String("type")
 	appname := ctx.String("name")
 	author := ctx.String("Author")
+	project := ctx.String("project")
+	single := ctx.Bool("single")
+
 	var c config
 	switch tye {
 	case "web":
-
 		c = config{
-			Alias:   appname,
+			Alias:   name(project, appname),
 			FQDN:    "test",
-			GoDir:   util.GetCurrentDirectory() + "/" + appname,
-			Appname: appname,
+			GoDir:   util.GetCurrentDirectory() + "/" + project + "/" + appname,
+			Appname: ifString(single, appname, project+"/"+appname),
 			Author:  author,
 			Time:    time.Now().Format("2006-01-02 15:04:05"),
 			Files: []file{
 				{"cmd/main.go", tmpl.Main_web},
+				{"cmd/conf.yaml", tmpl.Conf_template},
 				{"dao/dao.go", tmpl.Dao_template},
 				{"go.mod", tmpl.Go_mod},
 				{"model/model.go", tmpl.Model_template},
 				{"server/http/http.go", tmpl.HttpServer_template},
-				{"service/service.go", tmpl.Service_template},
+				{"service/service.go", tmpl.Service_web_template},
 				{"Makefile", tmpl.Makefile_template},
 				{"conf/conf.go", tmpl.ConfDemo_template},
+				{"proto/hello.proto", tmpl.Proto_template},
 			},
 			Comments: []string{
-				"\ndownload protobuf for micro:\n",
-				"brew install protobuf",
-				"go get -u github.com/golang/protobuf/{proto,protoc-gen-go}",
-				"go get -u github.com/micro/protoc-gen-micro",
-				"\ncompile the proto file example.proto:\n",
-				//"cd " + goDir,
-				"protoc --proto_path=. --go_out=. --micro_out=. proto/example/example.proto\n",
+				"curl http://localhost:8080/hello",
+				//"\ndownload protobuf for micro:\n",
+				//"brew install protobuf",
+				//"go get -u github.com/golang/protobuf/{proto,protoc-gen-go}",
+				//"go get -u github.com/micro/protoc-gen-micro",
+				//"\ncompile the proto file example.proto:\n",
+				////"cd " + goDir,
+				//"protoc --proto_path=. --go_out=. --micro_out=. proto/example/example.proto\n",
+			},
+		}
+	case "srv":
+		c = config{
+			Alias:   name(project, appname),
+			FQDN:    "test",
+			GoDir:   util.GetCurrentDirectory() + "/" + project + "/" + appname,
+			Appname: ifString(single, appname, project+"/"+appname),
+			Author:  author,
+			Time:    time.Now().Format("2006-01-02 15:04:05"),
+			Files: []file{
+				{"cmd/main.go", tmpl.Main_srv},
+				{"cmd/conf.yaml", tmpl.Conf_template},
+				{"dao/dao.go", tmpl.Dao_template},
+				{"go.mod", tmpl.Go_mod},
+				{"model/model.go", tmpl.Model_template},
+				{"service/service.go", tmpl.Service_template},
+				{"service/handler.go", tmpl.Service_handler_teplate},
+				{"Makefile", tmpl.Makefile_template},
+				{"conf/conf.go", tmpl.ConfDemo_template},
+				{"proto/hello.proto", tmpl.Proto_template},
+			},
+			Comments: []string{
+				"curl http://localhost:8080/hello",
+				//"\ndownload protobuf for micro:\n",
+				//"brew install protobuf",
+				//"go get -u github.com/golang/protobuf/{proto,protoc-gen-go}",
+				//"go get -u github.com/micro/protoc-gen-micro",
+				//"\ncompile the proto file example.proto:\n",
+				////"cd " + goDir,
+				//"protoc --proto_path=. --go_out=. --micro_out=. proto/example/example.proto\n",
 			},
 		}
 	}
@@ -197,4 +242,26 @@ func write(c config, file, tmpl string) error {
 	}
 
 	return t.Execute(f, c)
+}
+
+func useProject(single bool, projectName, file string) string {
+	//if !single && len(projectName) != 0 {
+	//	return projectName + "/" + file
+	//}
+	return file
+}
+
+func ifString(b bool, tValue, fValue string) string {
+	if b {
+		return tValue
+	} else {
+		return fValue
+	}
+}
+
+func name(project, app string) string {
+	if project != "" {
+		return project
+	}
+	return app
 }
