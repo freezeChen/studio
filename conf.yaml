@@ -12,10 +12,10 @@ redis:
   auth: ""
   active: 100
   idle: 20
-  dialTimeout: ""
-  readTimeout: ""
-  writeTimeout: ""
-  idleTimeout: ""
+  dialTimeout: "1ms"
+  readTimeout: "1ms"
+  writeTimeout: "1ms"
+  idleTimeout: "1ms"
 kafka: "127.0.0.1:9092"
 
 

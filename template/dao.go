@@ -6,8 +6,7 @@
 */
 package template
 
-var Dao_template =
-`/*
+var Dao_template = `/*
    @Time : {{.Time}}
    @Author : {{.Author}}
    @File : dao
@@ -15,16 +14,24 @@ var Dao_template =
 */
 package dao
 
+import (
+	"github.com/freezeChen/studio-library/database/mysql"
+	"github.com/freezeChen/studio-library/redis"
+	"github.com/go-xorm/xorm"
+	_ "github.com/go-sql-driver/mysql"
+	"{{.Appname}}/conf"
+)
+
 type Dao struct {
+	Db    xorm.EngineInterface
+	Redis *redis.Redis
 }
 
-func New() (dao *Dao) {
-
+func New(c *conf.Config) (dao *Dao) {
 	dao = &Dao{
-
+		Db:    mysql.New(c.Mysql),
+		Redis: redis.New(c.Redis),
 	}
-
 	return
 }
-
 `

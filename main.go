@@ -8,6 +8,7 @@ package main
 
 import (
 	New "github.com/freezeChen/studio/new"
+	"github.com/freezeChen/studio/template"
 	"github.com/micro/cli"
 	"github.com/micro/go-micro/cmd"
 )
@@ -17,24 +18,15 @@ const description = "a scaffolding for go-micro"
 
 func main() {
 	app := cmd.App()
-	app.Flags = append(app.Flags,
-		cli.StringFlag{
-			Name:  "test",
-			Usage: "fdsfdsf",
-		})
-
-	//cli.hel
+	app.Commands = append(app.Commands, New.Command()...)
 
 	app.Action = func(c *cli.Context) {
+		cli.HelpPrinter(c.App.Writer, template.Help_template, c.App)
 		cli.ShowAppHelp(c)
 	}
-
-	app.Commands = append(app.Commands, New.Command()...)
 
 	cmd.Init(
 		cmd.Name("studio"),
 		cmd.Description(description),
 		cmd.Version(version))
 }
-
-

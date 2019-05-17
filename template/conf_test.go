@@ -12,7 +12,11 @@ import (
 )
 
 func TestInit(t *testing.T) {
-	Init()
+	config, e := Init()
+	if e != nil {
+		t.Error(e)
+	}
 
-fmt.Println(Conf,Conf.Mysql,Conf.Redis)
+	fmt.Println(fmt.Sprintf("%+v", config))
+
 }
