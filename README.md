@@ -7,5 +7,5 @@ go get github.com/freezeChen/studio
 ```
 生成模板代码
 ```
-studio new --name=demo
+studio new --name=demo --type=web
 ```
