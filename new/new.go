@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"github.com/freezeChen/studio-library/util"
 	tmpl "github.com/freezeChen/studio/template"
-	"github.com/micro/cli"
+	"github.com/urfave/cli"
 	"github.com/xlab/treeprint"
 	"os"
 	"path/filepath"
