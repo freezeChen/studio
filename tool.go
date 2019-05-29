@@ -27,10 +27,10 @@ func toolAction(c *cli.Context) (err error) {
 			updateTime := t.BuildTime.Format("2006/01/02")
 			fmt.Printf("%s%s: %s Author(%s) [%s]\n", color.HiMagentaString(t.Name), getNotice(t), color.HiCyanString(t.Summary), t.Author, updateTime)
 		}
-		fmt.Println("\n安装工具: kratos tool install demo")
-		fmt.Println("执行工具: kratos tool demo")
-		fmt.Println("安装全部工具: kratos tool install all")
-		fmt.Println("\n详细文档：", toolDoc)
+		fmt.Println("\n安装工具: studio tool install demo")
+		fmt.Println("执行工具: studio tool demo")
+		fmt.Println("安装全部工具: studio tool install all")
+		//fmt.Println("\n详细文档：", toolDoc)
 		return
 	}
 	if c.Args().First() == "install" {
@@ -155,9 +155,6 @@ func (t Tool) install() {
 	fmt.Println(t.Install)
 	cmds := strings.Split(t.Install, " ")
 	if len(cmds) > 0 {
-		if t.Name == "protoc" {
-
-		}
 		if err := runTool(t.Name, path.Dir(t.toolPath()), cmds[0], cmds[1:]); err == nil {
 			color.Green("%s: 安装成功!", t.Name)
 		}
