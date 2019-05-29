@@ -21,7 +21,7 @@ func main() {
 		cli.Command{
 			Name:            "tool",
 			Aliases:         []string{"t"},
-			Usage:           "kratos tool",
+			Usage:           "studio tool",
 			Action:          toolAction,
 			SkipFlagParsing: true,
 		},
