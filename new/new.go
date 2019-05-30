@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"github.com/freezeChen/studio-library/util"
 	tmpl "github.com/freezeChen/studio/template"
-	"github.com/micro/cli"
+	"github.com/urfave/cli"
 	"github.com/xlab/treeprint"
 	"os"
 	"path/filepath"
@@ -43,6 +43,7 @@ type config struct {
 	// Plugins registry=etcd:broker=nats
 	Plugins []string
 	Appname string
+	Package string
 	Time    string
 	Author  string
 }
@@ -97,6 +98,7 @@ func run(ctx *cli.Context) {
 	single := ctx.Bool("single")
 
 	var c config
+
 	switch tye {
 	case "web":
 		c = config{
@@ -161,7 +163,11 @@ func run(ctx *cli.Context) {
 			},
 		}
 	}
-
+	if project != "" {
+		c.Package = fmt.Sprintf("%s/%s", project, appname)
+	} else {
+		c.Package = appname
+	}
 	err := create(c)
 	if err != nil {
 		fmt.Println(err.Error())
