@@ -15,8 +15,8 @@ var Service_template = `/*
 package service
 
 import (
-	"{{.Appname}}/conf"
-	"{{.Appname}}/dao"
+	"{{.Package}}/conf"
+	"{{.Package}}/dao"
 )
 
 type Service struct {
@@ -41,9 +41,9 @@ var Service_web_template = `/*
 package service
 
 import (
-	"{{.Appname}}/conf"
-	"{{.Appname}}/dao"
-	"{{.Appname}}/proto"
+	"{{.Package}}/conf"
+	"{{.Package}}/dao"
+	"{{.Package}}/proto"
 )
 
 type Service struct {
@@ -74,7 +74,7 @@ package service
 import (
 	"context"
 	"fmt"
-	"{{.Appname}}/proto"
+	"{{.Package}}/proto"
 )
 
 func (Service) Hello(ctx context.Context, req *proto.Req, reply *proto.Reply) error {
