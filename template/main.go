@@ -17,10 +17,10 @@ package main
 import (
 	"github.com/micro/go-web"
 	"github.com/micro/go-micro/client"
-	"{{.Appname}}/conf"
-	"{{.Appname}}/server/http"
-	"{{.Appname}}/proto"
-	"{{.Appname}}/service"
+	"{{.Package}}/conf"
+	"{{.Package}}/server/http"
+	"{{.Package}}/proto"
+	"{{.Package}}/service"
 )
 
 func main() {
@@ -53,9 +53,9 @@ package main
 
 import (
 	"github.com/micro/go-micro"
-	"{{.Appname}}/conf"
-	"{{.Appname}}/proto"
-	"{{.Appname}}/service"
+	"{{.Package}}/conf"
+	"{{.Package}}/proto"
+	"{{.Package}}/service"
 )
 
 func main() {

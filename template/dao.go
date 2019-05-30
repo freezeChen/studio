@@ -19,7 +19,7 @@ import (
 	"github.com/freezeChen/studio-library/redis"
 	"github.com/go-xorm/xorm"
 	_ "github.com/go-sql-driver/mysql"
-	"{{.Appname}}/conf"
+	"{{.Package}}/conf"
 )
 
 type Dao struct {

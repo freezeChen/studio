@@ -17,8 +17,8 @@ package http
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"{{.Appname}}/service"
-	"{{.Appname}}/proto"
+	"{{.Package}}/service"
+	"{{.Package}}/proto"
 )
 
 var (
