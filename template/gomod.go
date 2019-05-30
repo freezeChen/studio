@@ -7,7 +7,7 @@
 package template
 
 
-var Go_mod = `module {{.Appname}}
+var Go_mod = `module {{.Package}}
 
 go 1.12
 
@@ -18,7 +18,7 @@ require (
 	github.com/mattn/go-colorable v0.1.1 // indirect
 	github.com/micro/go-micro v1.1.0
 	github.com/micro/go-web v1.0.0
-	github.com/freezeChen/studio-library v0.0.2
+	github.com/freezeChen/studio-library v0.0.3
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v8 v8.18.2 // indirect
 	launchpad.net/gocheck v0.0.0-20140225173054-000000000087 // indirect

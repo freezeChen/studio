@@ -12,7 +12,7 @@ require (
 	github.com/aws/aws-sdk-go v1.19.39 // indirect
 	github.com/bilibili/kratos v0.0.0-20190527145001-509413751651 // indirect
 	github.com/fatih/color v1.7.0
-	github.com/freezeChen/studio-library v0.0.2
+	github.com/freezeChen/studio-library v0.0.3
 	github.com/go-acme/lego v2.6.0+incompatible // indirect
 	github.com/gocql/gocql v0.0.0-20190523124812-0680bfb96414 // indirect
 	github.com/gophercloud/gophercloud v0.1.0 // indirect
@@ -48,7 +48,5 @@ require (
 	k8s.io/utils v0.0.0-20190529001817-6999998975a7 // indirect
 	sigs.k8s.io/structured-merge-diff v0.0.0-20190525122527-15d366b2352e // indirect
 )
-
-replace github.com/freezeChen/studio-library => ../studio-library
 
 replace github.com/golang/lint => golang.org/x/lint v0.0.0-20190409202823-959b441ac422
