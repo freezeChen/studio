@@ -14,6 +14,7 @@ import (
 	"github.com/freezeChen/studio-library/database/mysql"
 	"github.com/freezeChen/studio-library/redis"
 	"github.com/freezeChen/studio-library/util"
+	"github.com/freezeChen/studio-library/zlog"
 	"github.com/micro/go-config"
 )
 
@@ -21,6 +22,8 @@ type Config struct {
 	Name    string
 	Version string
 	Env     string
+	Debug   bool
+	Log		*zlog.Config
 	Mysql   *mysql.Config
 	Redis   *redis.Config
 }
@@ -46,6 +49,7 @@ var ConfFile_template = `
 name: "{{.Appname}}"
 env: "dev"
 version: "v0.0.1"
+Debug: true
 mysql:
   source: "test:test@tcp(127.0.0.1:3306)/test?timeout=5s&readTimeout=5s&writeTimeout=5s&parseTime=true&loc=Local&charset=utf8,utf8mb4"
   active: 100
