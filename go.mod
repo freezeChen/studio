@@ -11,3 +11,5 @@ require (
 	github.com/xlab/treeprint v0.0.0-20181112141820-a009c3971eca
 	golang.org/x/sys v0.0.0-20190528183647-3626398d7749 // indirect
 )
+
+replace github.com/freezeChen/studio-library => ../studio-library

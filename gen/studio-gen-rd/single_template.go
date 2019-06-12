@@ -4,27 +4,35 @@ import (
 	"strings"
 )
 
+var dd = `
+func (d *{{.StructName}}) NAME(c context.Context, id KEY {{.ExtraArgsType}}) (res VALUE, err error) {
+	
+
+}
+
+`
+
 var _singleGetTemplate = `
 // NAME {{or .Comment "get data from redis"}} 
 func (d *{{.StructName}}) NAME(c context.Context, id KEY {{.ExtraArgsType}}) (res VALUE, err error) {
 	key := {{.KeyMethod}}(id{{.ExtraArgs}})
 	{{if .GetSimpleValue}}
 		var v string
-		err = d.mc.Get(c, key).Scan(&v)
+		err = d.mc.CacheGet(c, key).Scan(&v)
 	{{else}}
 		{{if .GetDirectValue}}
-			err = d.mc.Get(c, key).Scan(&res)
+			err = d.mc.CacheGet(c, key).Scan(&res)
 		{{else}}
 			{{if .PointType}}
 				res = &{{.OriginValueType}}{}
-				if err = d.mc.Get(c, key).Scan(res); err != nil {
+				if err = d.mc.CacheGet(c, key).Scan(res); err != nil {
 					res = nil
 					if err == memcache.ErrNotFound {
 						err = nil
 					}
 				}
 			{{else}}
-				err = d.mc.Get(c, key).Scan(&res)
+				err = d.mc.CacheGet(c, key).Scan(&res)
 			{{end}}
 		{{end}}
 	{{end}}
@@ -36,15 +44,13 @@ func (d *{{.StructName}}) NAME(c context.Context, id KEY {{.ExtraArgsType}}) (re
 			return
 		}
 		{{end}}
-		prom.BusinessErrCount.Incr("mc:NAME")
-		log.Errorv(c, log.KV("NAME", fmt.Sprintf("%+v", err)), log.KV("key", key))
+	
 		return
 	}
 	{{if .GetSimpleValue}}
 		r, err := {{.ConvertBytes2Value}}
 		if err != nil {
-			prom.BusinessErrCount.Incr("mc:NAME")
-			log.Errorv(c, log.KV("NAME", fmt.Sprintf("%+v", err)), log.KV("key", key))
+		
 			return
 		}
 		res = {{.ValueType}}(r)
@@ -69,15 +75,12 @@ func (d *{{.StructName}}) NAME(c context.Context, id KEY, val VALUE {{.ExtraArgs
 	key := {{.KeyMethod}}(id{{.ExtraArgs}})
 	{{if .SimpleValue}}
 		bs := {{.ConvertValue2Bytes}}
-		item := &redis.Item{Key: key, Value: bs, Expiration: {{.ExpireCode}}, Flags: {{.Encode}}}
+		item := &redis.Item{Key: key, Value: bs, Expiration: {{.ExpireCode}}}
 	{{else}}
-		item := &redis.Item{Key: key, Object: val, Expiration: {{.ExpireCode}}, Flags: {{.Encode}}}
+		item := &redis.Item{Key: key, Object: val, Expiration: {{.ExpireCode}}}
 	{{end}}
-	if err = d.mc.Set(c, item); err != nil {
-		prom.BusinessErrCount.Incr("mc:NAME")
-		log.Errorv(c, log.KV("NAME", fmt.Sprintf("%+v", err)), log.KV("key", key))
-		return
-	}
+	err = d.mc.CaCheSet(item)
+
 	return
 }
 `
@@ -88,15 +91,7 @@ var _singleDelTemplate = `
 // NAME {{or .Comment "delete data from redis"}} 
 func (d *{{.StructName}}) NAME(c context.Context, id KEY {{.ExtraArgsType}}) (err error) {
 	key := {{.KeyMethod}}(id{{.ExtraArgs}})
-	if err = d.mc.Delete(c, key); err != nil {
-		if err == memcache.ErrNotFound {
-			err = nil
-			return
-		}
-		prom.BusinessErrCount.Incr("mc:NAME")
-		log.Errorv(c, log.KV("NAME", fmt.Sprintf("%+v", err)), log.KV("key", key))
-		return
-	}
+	err = d.mc.Delete(key)
 	return
 }
 `
