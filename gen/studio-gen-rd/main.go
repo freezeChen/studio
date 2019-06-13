@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"flag"
+	"fmt"
 	"github.com/freezeChen/studio/pkg"
 	"go/ast"
 	"io/ioutil"
@@ -13,8 +14,6 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
-
-
 )
 
 var (
@@ -112,6 +111,7 @@ func getOptions(opt *options, comment string) {
 	if *mcType != "" {
 		opt.MCType = *mcType
 	}
+	//fmt.Println("key:"+*key)
 	if *key != "" {
 		opt.KeyMethod = *key
 	}
@@ -168,6 +168,7 @@ func processList(s *pkg.Source, list *ast.Field) (opt options) {
 	opt = options{Args: s.GetDef(_interfaceName), UseMemcached: true, importPackages: s.Packages(list)}
 	opt.name = list.Names[0].Name
 	opt.KeyMethod = "key" + opt.name
+	fmt.Println(opt.KeyMethod)
 	opt.ExpireCode = "d.mc" + opt.name + "Expire"
 	// get comment
 	line := fset.Position(list.Pos()).Line - 3

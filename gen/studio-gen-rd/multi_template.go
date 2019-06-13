@@ -16,10 +16,10 @@ func (d *{{.StructName}}) NAME(c context.Context, ids []KEY {{.ExtraArgsType}}) 
 		for i:=0;i < l; i+= GROUPSIZE * MAXGROUP {
 			var subKeys []KEY
 			{{if .BatchErrBreak}}
-				group, ctx := errgroup.WithContext(c)
+				group := errgroup.WithContext(c)
 			{{else}}
 				group := &errgroup.Group{}
-				ctx := c
+				
 			{{end}}
 			if (i + GROUPSIZE * MAXGROUP) > l {
 				subKeys = ids[i:]
@@ -34,7 +34,7 @@ func (d *{{.StructName}}) NAME(c context.Context, ids []KEY {{.ExtraArgsType}}) 
 				} else {
 					ks = subKeys[j:j+GROUPSIZE]
 				}
-				group.Go(func() (err error) {
+				group.Go(func(ctx context.Context) (err error) {
 					keysMap := make(map[string]KEY, len(ks))
 					keys := make([]string, 0, len(ks))
 					for _, id := range ks {
@@ -42,13 +42,12 @@ func (d *{{.StructName}}) NAME(c context.Context, ids []KEY {{.ExtraArgsType}}) 
 						keysMap[key] = id
 						keys = append(keys, key)
 					}
-					replies, err := d.mc.GetMulti(c, keys)
+					replies, err := d.mc.CacheGetMulti(c, keys)
 					if err != nil {
-						prom.BusinessErrCount.Incr("mc:NAME")
-						log.Errorv(ctx, log.KV("NAME", fmt.Sprintf("%+v", err)), log.KV("keys", keys))
+
 						return
 					}
-					for _, key := range replies.Keys() {
+					for _, key := range keys {
 						{{if .GetSimpleValue}}
 							var v string
 							err = replies.Scan(key, &v)
@@ -67,15 +66,11 @@ func (d *{{.StructName}}) NAME(c context.Context, ids []KEY {{.ExtraArgsType}}) 
 							{{end}}
 						{{end}}
 						if err != nil {
-							prom.BusinessErrCount.Incr("mc:NAME")
-							log.Errorv(ctx, log.KV("NAME", fmt.Sprintf("%+v", err)), log.KV("key", key))
 							return
 						}
 						{{if .GetSimpleValue}}
 							r, err := {{.ConvertBytes2Value}}
 							if err != nil {
-								prom.BusinessErrCount.Incr("mc:NAME")
-								log.Errorv(ctx, log.KV("NAME", fmt.Sprintf("%+v", err)), log.KV("key", key))
 								return res, err
 							}
 							mutex.Lock()
@@ -112,13 +107,11 @@ func (d *{{.StructName}}) NAME(c context.Context, ids []KEY {{.ExtraArgsType}}) 
 			keysMap[key] = id
 			keys = append(keys, key)
 		}
-		replies, err := d.mc.GetMulti(c, keys)
+		replies, err := d.mc.CacheGetMulti(c, keys)
 		if err != nil {
-			prom.BusinessErrCount.Incr("mc:NAME")
-			log.Errorv(c, log.KV("NAME", fmt.Sprintf("%+v", err)), log.KV("keys", keys))
 			return
 		}
-		for _, key := range replies.Keys() {
+		for _, key := range keys {
 			{{if .GetSimpleValue}}
 				var v string
 				err = replies.Scan(key, &v)
@@ -132,15 +125,11 @@ func (d *{{.StructName}}) NAME(c context.Context, ids []KEY {{.ExtraArgsType}}) 
 				{{end}}
 			{{end}}
 			if err != nil {
-				prom.BusinessErrCount.Incr("mc:NAME")
-				log.Errorv(c, log.KV("NAME", fmt.Sprintf("%+v", err)), log.KV("key", key))
 				return
 			}
 			{{if .GetSimpleValue}}
 				r, err := {{.ConvertBytes2Value}}
 				if err != nil {
-					prom.BusinessErrCount.Incr("mc:NAME")
-					log.Errorv(c, log.KV("NAME", fmt.Sprintf("%+v", err)), log.KV("key", key))
 					return res, err
 				}
 				if res == nil {
@@ -169,13 +158,12 @@ func (d *{{.StructName}}) NAME(c context.Context, values map[KEY]VALUE {{.ExtraA
 		key := {{.KeyMethod}}(id{{.ExtraArgs}})
 		{{if .SimpleValue}}
 			bs := {{.ConvertValue2Bytes}}
-			item := &memcache.Item{Key: key, Value: bs, Expiration: {{.ExpireCode}}, Flags: {{.Encode}}}
+			item := &redis.Item{Key: key, Value: bs, Expiration: {{.ExpireCode}}}
 		{{else}}
-			item := &memcache.Item{Key: key, Object: val, Expiration: {{.ExpireCode}}, Flags: {{.Encode}}}
+			item := &redis.Item{Key: key, Object: val, Expiration: {{.ExpireCode}}}
 		{{end}}
-		if err = d.mc.Set(c, item); err != nil {
-			prom.BusinessErrCount.Incr("mc:NAME")
-			log.Errorv(c, log.KV("NAME", fmt.Sprintf("%+v", err)), log.KV("key", key))
+		if err = d.mc.CaCheSet(c, item); err != nil {
+			
 			return
 		}
 	}
@@ -194,12 +182,11 @@ func (d *{{.StructName}}) NAME(c context.Context, ids []KEY {{.ExtraArgsType}}) 
 	for _, id := range ids {
 		key := {{.KeyMethod}}(id{{.ExtraArgs}})
 		if err = d.mc.Delete(c, key); err != nil {
-			if err == memcache.ErrNotFound {
+			if err == redis.ErrNotFound {
 				err = nil
 				continue
 			}
-			prom.BusinessErrCount.Incr("mc:NAME")
-			log.Errorv(c, log.KV("NAME", fmt.Sprintf("%+v", err)), log.KV("key", key))
+		
 			return
 		}
 	}

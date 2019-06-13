@@ -15,14 +15,12 @@ package {{.PkgName}}
 
 import (
 	"context"
-	"fmt"
 	{{if .UseStrConv}}"strconv"{{end}}
 	{{if .EnableBatch }}"sync"{{end}}
 NEWLINE
-	"github.com/bilibili/kratos/pkg/stat/prom"
+
 	{{if .UseMemcached }}"github.com/freezeChen/studio-library/redis"{{end}}
-	{{if .EnableBatch }}"github.com/bilibili/kratos/pkg/sync/errgroup"{{end}}
-	"github.com/bilibili/kratos/pkg/log"
+	{{if .EnableBatch }}"github.com/freezeChen/studio-library/lib/errgroup"{{end}}
 	{{.ImportPackage}}
 )
 

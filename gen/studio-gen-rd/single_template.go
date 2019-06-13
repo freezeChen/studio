@@ -4,14 +4,6 @@ import (
 	"strings"
 )
 
-var dd = `
-func (d *{{.StructName}}) NAME(c context.Context, id KEY {{.ExtraArgsType}}) (res VALUE, err error) {
-	
-
-}
-
-`
-
 var _singleGetTemplate = `
 // NAME {{or .Comment "get data from redis"}} 
 func (d *{{.StructName}}) NAME(c context.Context, id KEY {{.ExtraArgsType}}) (res VALUE, err error) {
@@ -27,26 +19,13 @@ func (d *{{.StructName}}) NAME(c context.Context, id KEY {{.ExtraArgsType}}) (re
 				res = &{{.OriginValueType}}{}
 				if err = d.mc.CacheGet(c, key).Scan(res); err != nil {
 					res = nil
-					if err == memcache.ErrNotFound {
-						err = nil
-					}
+					return 
 				}
 			{{else}}
 				err = d.mc.CacheGet(c, key).Scan(&res)
 			{{end}}
 		{{end}}
 	{{end}}
-	if err != nil {
-		{{if .PointType}}
-		{{else}}
-		if err == memcache.ErrNotFound {
-			err = nil
-			return
-		}
-		{{end}}
-	
-		return
-	}
 	{{if .GetSimpleValue}}
 		r, err := {{.ConvertBytes2Value}}
 		if err != nil {
@@ -79,7 +58,7 @@ func (d *{{.StructName}}) NAME(c context.Context, id KEY, val VALUE {{.ExtraArgs
 	{{else}}
 		item := &redis.Item{Key: key, Object: val, Expiration: {{.ExpireCode}}}
 	{{end}}
-	err = d.mc.CaCheSet(item)
+	err = d.mc.CaCheSet(c,item)
 
 	return
 }
@@ -91,7 +70,7 @@ var _singleDelTemplate = `
 // NAME {{or .Comment "delete data from redis"}} 
 func (d *{{.StructName}}) NAME(c context.Context, id KEY {{.ExtraArgsType}}) (err error) {
 	key := {{.KeyMethod}}(id{{.ExtraArgs}})
-	err = d.mc.Delete(key)
+	err = d.mc.Delete(c,key)
 	return
 }
 `
