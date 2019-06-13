@@ -23,9 +23,9 @@ var toolIndexs = []*Tool{
 	},
 	&Tool{
 		Name:      "genbts",
-		Alias:     "kratos-gen-bts",
+		Alias:     "studio-gen-bts",
 		BuildTime: time.Date(2019, 5, 5, 0, 0, 0, 0, time.Local),
-		Install:   "go get -u github.com/bilibili/kratos/tool/kratos-gen-bts",
+		Install:   "go get -u github.com/freezeChen/studio/gen/studio-gen-bts",
 		Summary:   "缓存回源逻辑代码生成器",
 		Platform:  []string{"darwin", "linux", "windows"},
 		Author:    "studio",
@@ -34,11 +34,12 @@ var toolIndexs = []*Tool{
 		Name:      "genrd",
 		Alias:     "studio-gen-rd",
 		BuildTime: time.Date(2019, 5, 5, 0, 0, 0, 0, time.Local),
-		Install:   "go get -u github.com/bilibili/kratos/tool/kratos-gen-mc",
+		Install:   "go get -u github.com/freezeChen/studio/gen/studio-gen-rd",
 		Summary:   "redis缓存代码生成",
 		Platform:  []string{"darwin", "linux", "windows"},
 		Author:    "studio",
 	},
+
 	&Tool{
 		Name:      "protoc",
 		Alias:     "studio-protoc",

@@ -21,7 +21,6 @@ func (d *Dao) NAME(c context.Context, {{.IDName}} KEY{{.ExtraArgsType}}) (res VA
 	{{else}}
 	if res != {{.ZeroValue}} {
 	{{end}}
-	prom.CacheHit.Incr("NAME")
 		return
 	}
 	{{if .EnablePaging}}
@@ -31,7 +30,6 @@ func (d *Dao) NAME(c context.Context, {{.IDName}} KEY{{.ExtraArgsType}}) (res VA
 		var rr interface{}
 		sf := d.cacheSFNAME({{.IDName}} {{.ExtraArgs}})
 		rr, err, _ = cacheSingleFlights[SFNUM].Do(sf, func() (r interface{}, e error) {
-			prom.CacheMiss.Incr("NAME")
 			{{if .EnablePaging}}
 				var rrs [2]interface{}
 				rrs[0], rrs[1], e = RAWFUNC(c, {{.IDName}} {{.ExtraRawArgs}})
@@ -48,7 +46,6 @@ func (d *Dao) NAME(c context.Context, {{.IDName}} KEY{{.ExtraArgsType}}) (res VA
 			res = rr.(VALUE)
 		{{end}}
 	{{else}}
-		prom.CacheMiss.Incr("NAME")
 		{{if .EnablePaging}}
 		res, miss, err = RAWFUNC(c, {{.IDName}} {{.ExtraRawArgs}})
 		{{else}}
@@ -77,9 +74,7 @@ func (d *Dao) NAME(c context.Context, {{.IDName}} KEY{{.ExtraArgsType}}) (res VA
 	{{if .Sync}}
 		ADDCACHEFUNC(c, {{.IDName}}, miss {{.ExtraAddCacheArgs}})
 	{{else}}
-	d.cache.Do(c, func(c context.Context) {
-		ADDCACHEFUNC(c, {{.IDName}}, miss {{.ExtraAddCacheArgs}})
-	})
+	ADDCACHEFUNC(c, {{.IDName}}, miss {{.ExtraAddCacheArgs}})
 	{{end}}
 	return
 }
