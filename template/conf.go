@@ -54,8 +54,11 @@ mysql:
   source: "test:test@tcp(127.0.0.1:3306)/test?timeout=5s&readTimeout=5s&writeTimeout=5s&parseTime=true&loc=Local&charset=utf8,utf8mb4"
   active: 100
   idle: 20
-
-
+log:
+  name: "{{.Appname}}"
+  debug: true
+  writeKafka: false
+  kafkaAddr: "127.0.0.1:9092"
 redis:
   addr: "127.0.0.1:6379"
   auth: ""

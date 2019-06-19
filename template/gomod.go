@@ -18,7 +18,7 @@ require (
 	github.com/mattn/go-colorable v0.1.1 // indirect
 	github.com/micro/go-micro v1.1.0
 	github.com/micro/go-web v1.0.0
-	github.com/freezeChen/studio-library v0.0.3
+	github.com/freezeChen/studio-library v0.0.8
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v8 v8.18.2 // indirect
 	launchpad.net/gocheck v0.0.0-20140225173054-000000000087 // indirect
