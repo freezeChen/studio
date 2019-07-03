@@ -14,6 +14,12 @@ mysql:
   source: "test:test@tcp(172.16.0.148:3306)/bilibili_show?timeout=5s&readTimeout=5s&writeTimeout=5s&parseTime=true&loc=Local&charset=utf8,utf8mb4"
   active: 100
   idle: 20
+log:
+	name: {{.Appname}}
+	debug: true
+	LogFileDir: "./log/"
+	KafkaAddr: "127.0.0.1:9092"
+	WriteKafka: false
 redis:
   addr: "127.0.0.1:6379"
   auth: ""

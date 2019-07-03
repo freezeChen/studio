@@ -15,7 +15,7 @@ import (
 	"github.com/freezeChen/studio-library/redis"
 	"github.com/freezeChen/studio-library/util"
 	"github.com/freezeChen/studio-library/zlog"
-	"github.com/micro/go-config"
+	"github.com/micro/go-micro/config"
 )
 
 type Config struct {

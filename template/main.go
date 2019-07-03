@@ -15,7 +15,8 @@ var Main_web = `/*
 package main
 
 import (
-	"github.com/micro/go-web"
+	"github.com/micro/go-micro/web"
+	"github.com/freezeChen/studio-library/zlog"
 	"github.com/micro/go-micro/client"
 	"{{.Package}}/conf"
 	"{{.Package}}/server/http"
@@ -28,10 +29,17 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	zlog.InitLogger(cfg.Log)
 	svc := web.NewService(
 	web.Name("go.micro.web.hello"),
-	web.Address(":8080"))
-	svc.Init()
+	web.Address(":8080"),
+	web.RegisterInterval(20*time.Second),
+	web.RegisterTTL(30*time.Second))
+
+	if err := svc.Init(); err != nil {
+		panic(err)
+	}
+
     helloService := proto.NewHelloService("go.micro.srv.hello", client.DefaultClient)
 	s:=service.New(cfg)
 	s.HelloService = helloService
@@ -52,6 +60,7 @@ var Main_srv = `/*
 package main
 
 import (
+	"github.com/freezeChen/studio-library/zlog"
 	"github.com/micro/go-micro"
 	"{{.Package}}/conf"
 	"{{.Package}}/proto"
@@ -63,9 +72,13 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	zlog.InitLogger(cfg.Log)
 	svc := micro.NewService(
 	micro.Name("go.micro.srv.hello"),
-	micro.Address(":8081"))
+	micro.Address(":8081"),
+	micro.RegisterInterval(20*time.Second),
+	micro.RegisterTTL(30*time.Second))
+
 	svc.Init()
 	s := service.New(cfg)
 	err = proto.RegisterHelloHandler(svc.Server(), s)
