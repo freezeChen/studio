@@ -10,14 +10,14 @@ func (d *{{.StructName}}) NAME(c context.Context) (res VALUE, err error) {
 	key := {{.KeyMethod}}()
 	{{if .GetSimpleValue}}
 		var v string
-		err = d.mc.Get(c, key).Scan(&v)
+		err = d.mc.GetConn(c, key).Scan(&v)
 	{{else}}
 		{{if .GetDirectValue}}
-			err = d.mc.Get(c, key).Scan(&res)
+			err = d.mc.GetConn(c, key).Scan(&res)
 		{{else}}
 			{{if .PointType}}
 				res = &{{.OriginValueType}}{}
-				if err = d.mc.Get(c, key).Scan(res); err != nil {
+				if err = d.mc.GetConn(c, key).Scan(res); err != nil {
 						res = nil
 					if err == memcache.ErrNotFound {
 						err = nil
@@ -25,7 +25,7 @@ func (d *{{.StructName}}) NAME(c context.Context) (res VALUE, err error) {
 					}
 				}
 			{{else}}
-				err = d.mc.Get(c, key).Scan(&res)
+				err = d.mc.GetConn(c, key).Scan(&res)
 			{{end}}
 		{{end}}
 	{{end}}
