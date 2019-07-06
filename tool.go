@@ -25,7 +25,8 @@ func toolAction(c *cli.Context) (err error) {
 		sort.Slice(toolIndexs, func(i, j int) bool { return toolIndexs[i].BuildTime.After(toolIndexs[j].BuildTime) })
 		for _, t := range toolIndexs {
 			updateTime := t.BuildTime.Format("2006/01/02")
-			fmt.Printf("%s%s: %s Author(%s) [%s]\n", color.HiMagentaString(t.Name), getNotice(t), color.HiCyanString(t.Summary), t.Author, updateTime)
+			fmt.Fprintf(color.Output,"%s%s: %s Author(%s) [%s]\n", color.HiMagentaString(t.Name), getNotice(t), color.HiCyanString(t.Summary), t.Author, updateTime)
+			//fmt.Printf("%s%s: %s Author(%s) [%s]\n", color.HiMagentaString(t.Name), getNotice(t), color.HiCyanString(t.Summary), t.Author, updateTime)
 		}
 		fmt.Println("\n安装工具: studio tool install demo")
 		fmt.Println("执行工具: studio tool demo")
