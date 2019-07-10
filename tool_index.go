@@ -6,8 +6,8 @@ var toolIndexs = []*Tool{
 	&Tool{
 		Name:      "studio",
 		Alias:     "studio",
-		BuildTime: time.Date(2019, 4, 2, 0, 0, 0, 0, time.Local),
-		Install:   "go get -u github.com/freezeChen/studio",
+		BuildTime: time.Date(2019, 7, 10, 0, 0, 0, 0, time.Local),
+		Install:   "go get github.com/freezeChen/studio@" + Version,
 		Summary:   "studio工具集本体",
 		Platform:  []string{"darwin", "linux", "windows"},
 		Author:    "studio",
@@ -15,7 +15,7 @@ var toolIndexs = []*Tool{
 	&Tool{
 		Name:      "swagger",
 		Alias:     "swagger",
-		BuildTime: time.Date(2019, 5, 5, 0, 0, 0, 0, time.Local),
+		BuildTime: time.Date(2019, 7, 10, 0, 0, 0, 0, time.Local),
 		Install:   "go get -u github.com/go-swagger/go-swagger/cmd/swagger",
 		Summary:   "swagger api文档",
 		Platform:  []string{"darwin", "linux", "windows"},
@@ -24,8 +24,8 @@ var toolIndexs = []*Tool{
 	&Tool{
 		Name:      "genbts",
 		Alias:     "studio-gen-bts",
-		BuildTime: time.Date(2019, 5, 5, 0, 0, 0, 0, time.Local),
-		Install:   "go get -u github.com/freezeChen/studio/gen/studio-gen-bts",
+		BuildTime: time.Date(2019, 7, 10, 0, 0, 0, 0, time.Local),
+		Install:   "go get github.com/freezeChen/studio/gen/studio-gen-bts@" + Version,
 		Summary:   "缓存回源逻辑代码生成器",
 		Platform:  []string{"darwin", "linux", "windows"},
 		Author:    "studio",
@@ -33,8 +33,8 @@ var toolIndexs = []*Tool{
 	&Tool{
 		Name:      "genrd",
 		Alias:     "studio-gen-rd",
-		BuildTime: time.Date(2019, 5, 5, 0, 0, 0, 0, time.Local),
-		Install:   "go get -u github.com/freezeChen/studio/gen/studio-gen-rd",
+		BuildTime: time.Date(2019, 7, 10, 0, 0, 0, 0, time.Local),
+		Install:   "go get github.com/freezeChen/studio/gen/studio-gen-rd@" + Version,
 		Summary:   "redis缓存代码生成",
 		Platform:  []string{"darwin", "linux", "windows"},
 		Author:    "studio",
@@ -44,9 +44,9 @@ var toolIndexs = []*Tool{
 		Name:      "protoc",
 		Alias:     "studio-protoc",
 		BuildTime: time.Date(2019, 5, 4, 0, 0, 0, 0, time.Local),
-		Install:   "go get -u github.com/freezeChen/studio/gen/studio-protoc",
+		Install:   "go get github.com/freezeChen/studio/gen/studio-protoc@" + Version,
 		Summary:   "快速方便生成pb.go的protoc封装，windows、Linux请先安装protoc工具",
 		Platform:  []string{"darwin", "linux", "windows"},
-		Author:    "freeze",
+		Author:    "studio",
 	},
 }
