@@ -42,7 +42,7 @@ func (d *{{.StructName}}) NAME(c context.Context, ids []KEY {{.ExtraArgsType}}) 
 						keysMap[key] = id
 						keys = append(keys, key)
 					}
-					replies, err := d.mc.CacheGetMulti(c, keys)
+					replies, err := d.redis.CacheGetMulti(c, keys)
 					if err != nil {
 
 						return
@@ -107,7 +107,7 @@ func (d *{{.StructName}}) NAME(c context.Context, ids []KEY {{.ExtraArgsType}}) 
 			keysMap[key] = id
 			keys = append(keys, key)
 		}
-		replies, err := d.mc.CacheGetMulti(c, keys)
+		replies, err := d.redis.CacheGetMulti(c, keys)
 		if err != nil {
 			return
 		}
@@ -162,7 +162,7 @@ func (d *{{.StructName}}) NAME(c context.Context, values map[KEY]VALUE {{.ExtraA
 		{{else}}
 			item := &redis.Item{Key: key, Object: val, Expiration: {{.ExpireCode}}}
 		{{end}}
-		if err = d.mc.CaCheSet(c, item); err != nil {
+		if err = d.redis.CaCheSet(c, item); err != nil {
 			
 			return
 		}
@@ -181,7 +181,7 @@ func (d *{{.StructName}}) NAME(c context.Context, ids []KEY {{.ExtraArgsType}}) 
 	}
 	for _, id := range ids {
 		key := {{.KeyMethod}}(id{{.ExtraArgs}})
-		if err = d.mc.Delete(c, key); err != nil {
+		if err = d.redis.Delete(c, key); err != nil {
 			if err == redis.ErrNotFound {
 				err = nil
 				continue

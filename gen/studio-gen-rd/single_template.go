@@ -10,19 +10,22 @@ func (d *{{.StructName}}) NAME(c context.Context, id KEY {{.ExtraArgsType}}) (re
 	key := {{.KeyMethod}}(id{{.ExtraArgs}})
 	{{if .GetSimpleValue}}
 		var v string
-		err = d.mc.CacheGet(c, key).Scan(&v)
+		err = d.redis.CacheGet(c, key).Scan(&v)
 	{{else}}
 		{{if .GetDirectValue}}
-			err = d.mc.CacheGet(c, key).Scan(&res)
+			err = d.redis.CacheGet(c, key).Scan(&res)
 		{{else}}
 			{{if .PointType}}
 				res = &{{.OriginValueType}}{}
-				if err = d.mc.CacheGet(c, key).Scan(res); err != nil {
+				if err = d.redis.CacheGet(c, key).Scan(res); err != nil {
+					if err == redis2.ErrNil {
+						err = nil
+					}
 					res = nil
 					return 
 				}
 			{{else}}
-				err = d.mc.CacheGet(c, key).Scan(&res)
+				err = d.redis.CacheGet(c, key).Scan(&res)
 			{{end}}
 		{{end}}
 	{{end}}
@@ -58,7 +61,7 @@ func (d *{{.StructName}}) NAME(c context.Context, id KEY, val VALUE {{.ExtraArgs
 	{{else}}
 		item := &redis.Item{Key: key, Object: val, Expiration: {{.ExpireCode}}}
 	{{end}}
-	err = d.mc.CaCheSet(c,item)
+	err = d.redis.CaCheSet(c,item)
 
 	return
 }
@@ -70,7 +73,7 @@ var _singleDelTemplate = `
 // NAME {{or .Comment "delete data from redis"}} 
 func (d *{{.StructName}}) NAME(c context.Context, id KEY {{.ExtraArgsType}}) (err error) {
 	key := {{.KeyMethod}}(id{{.ExtraArgs}})
-	err = d.mc.Delete(c,key)
+	err = d.redis.Delete(c,key)
 	return
 }
 `
