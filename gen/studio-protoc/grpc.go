@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"os"
 	"os/exec"
 
 	"github.com/urfave/cli"
@@ -11,7 +13,7 @@ const (
 
 	_getMICROGen = "go get -u github.com/micro/protoc-gen-micro"
 
-	_grpcProtoc = "protoc --proto_path=. --micro_out=. --gogofast_out=plugins=grpc:."
+	_grpcProtoc = "protoc --proto_path=. --proto_path=%s --micro_out=. --gogofast_out=plugins=grpc:."
 
 	//_grpcProtoc = "protoc --proto_path=%s --proto_path=%s --proto_path=%s --gogofast_out=plugins=grpc:."
 )
@@ -31,5 +33,5 @@ func installGRPCGen() error {
 }
 
 func genGRPC(ctx *cli.Context) error {
-	return generate(ctx, _grpcProtoc)
+	return generate(ctx, fmt.Sprintf(_grpcProtoc,os.Getenv("GOPATH")+"/src"))
 }
