@@ -9,11 +9,12 @@ import (
 )
 
 const (
-	_getGRPCGen = "go get github.com/gogo/protobuf/protoc-gen-gogofast"
+	_getGRPCGen = "go get github.com/gogo/protobuf/protoc-gen-gogofaster"
 
-	_getMICROGen = "go get -u github.com/micro/protoc-gen-micro"
+	_getMICROGen = "go get -u github.com/micro/protoc-gen-micro/v2"
 
-	_grpcProtoc = "protoc --proto_path=. --proto_path=%s --micro_out=. --gogofast_out=plugins=grpc:."
+	_grpcProtoc = "protoc --proto_path=. --proto_path=%s --micro_out=. --gogofaster_out=plugins=grpc:."
+
 
 	//_grpcProtoc = "protoc --proto_path=%s --proto_path=%s --proto_path=%s --gogofast_out=plugins=grpc:."
 )

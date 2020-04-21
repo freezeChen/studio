@@ -25,7 +25,7 @@ func toolAction(c *cli.Context) (err error) {
 		sort.Slice(toolIndexs, func(i, j int) bool { return toolIndexs[i].BuildTime.After(toolIndexs[j].BuildTime) })
 		for _, t := range toolIndexs {
 			updateTime := t.BuildTime.Format("2006/01/02")
-			fmt.Fprintf(color.Output,"%s%s: %s Author(%s) [%s]\n", color.HiMagentaString(t.Name), getNotice(t), color.HiCyanString(t.Summary), t.Author, updateTime)
+			fmt.Fprintf(color.Output, "%s%s: %s Author(%s) [%s]\n", color.HiMagentaString(t.Name), getNotice(t), color.HiCyanString(t.Summary), t.Author, updateTime)
 			//fmt.Printf("%s%s: %s Author(%s) [%s]\n", color.HiMagentaString(t.Name), getNotice(t), color.HiCyanString(t.Summary), t.Author, updateTime)
 		}
 		fmt.Println("\n安装工具: studio tool install demo")
@@ -119,6 +119,7 @@ func runTool(name, dir, cmd string, args []string) (err error) {
 		if lp, err = exec.LookPath(cmd); err == nil {
 			toolCmd.Path = lp
 		}
+
 	}
 	if err = toolCmd.Run(); err != nil {
 		if e, ok := err.(*exec.ExitError); !ok || !e.Exited() {
@@ -175,7 +176,11 @@ func (t Tool) updated() bool {
 }
 
 func (t Tool) toolPath() string {
-	return filepath.Join(gopath(), "bin", t.Alias)
+	toolPath := filepath.Join(gopath(), "bin", t.Alias)
+	if runtime.GOOS == "windows" {
+		toolPath += ".exe"
+	}
+	return toolPath
 }
 
 func (t Tool) installed() bool {
