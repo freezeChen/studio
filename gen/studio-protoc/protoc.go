@@ -117,11 +117,11 @@ func goget(url string) error {
 
 func latestKratos() (string, error) {
 	gopath := gopath()
-	ext := path.Join(gopath, "src/github.com/bilibili/kratos/tool/protobuf/pkg/extensions")
+	ext := path.Join(gopath, "src/github.com/gogo/protobuf/gogoproto")
 	if _, err := os.Stat(ext); !os.IsNotExist(err) {
 		return ext, nil
 	}
-	ext = path.Join(gopath, "pkg/mod/github.com/bilibili")
+	ext = path.Join(gopath, "pkg/mod/github.com/gogo")
 	files, err := ioutil.ReadDir(ext)
 	if err != nil {
 		return "", err

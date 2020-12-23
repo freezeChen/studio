@@ -11,7 +11,7 @@ name: "{{.Appname}}"
 env: "dev"
 version: "v0.0.1"
 mysql:
-	source: "test:test@tcp(172.16.0.148:3306)/bilibili_show?timeout=5s&readTimeout=5s&writeTimeout=5s&parseTime=true&loc=Local&charset=utf8,utf8mb4"
+	source: "test:test@tcp(172.16.0.148:3306)/studio?timeout=5s&readTimeout=5s&writeTimeout=5s&parseTime=true&loc=Local&charset=utf8,utf8mb4"
 	active: 100
 	idle: 20
 log:
